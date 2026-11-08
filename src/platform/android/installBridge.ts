@@ -11,6 +11,10 @@
 // unaffected.
 import { SIGNER_WASM_BASE64 } from "../../../electron/signer";
 import type { LinerElectronApi } from "../../../electron/preload";
+<<<<<<< HEAD
+=======
+import { installAndroidFetch } from "./androidFetch";
+>>>>>>> e9cee71 (youtube music + soundcloud)
 import { GUEST_USER } from "./guest/guestBackend";
 import {
   savedGetLyrics,
@@ -544,6 +548,10 @@ export function installAndroidBridge(): boolean {
   if (!cap?.isNativePlatform?.()) return false;
   if (window.linerElectron) return false;
   window.linerElectron = buildApi();
+<<<<<<< HEAD
+=======
+  installAndroidFetch();
+>>>>>>> e9cee71 (youtube music + soundcloud)
   document.documentElement.classList.add("android-app");
   return true;
 }

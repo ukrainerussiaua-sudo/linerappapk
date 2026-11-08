@@ -1,4 +1,8 @@
 import { isAndroidApp } from "@/platform/android/native";
+<<<<<<< HEAD
+=======
+import { isSaavnId } from "@/platform/android/saavn/saavnApi";
+>>>>>>> e9cee71 (youtube music + soundcloud)
 import { saavnCatalog } from "@/platform/android/saavn/saavnCatalog";
 import { innertubeCatalog } from "@/shared/youtube";
 import {
@@ -47,7 +51,12 @@ async function preferClient<T>(
 const SNAPSHOT_TIMEOUT_MS = 4000;
 
 async function resolveSnapshot(id: string): Promise<Track | undefined> {
+<<<<<<< HEAD
   if (isAndroidApp()) return saavnCatalog.resolveSnapshot(id);
+=======
+  if (isAndroidApp() && isSaavnId(id))
+    return saavnCatalog.resolveSnapshot(id);
+>>>>>>> e9cee71 (youtube music + soundcloud)
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), SNAPSHOT_TIMEOUT_MS);
   const catalog = isSoundCloudCatalogId(id)

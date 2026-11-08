@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import { isAndroidApp } from "@/platform/android/native";
+import { downloadAudioBlob } from "@/platform/android/androidFetch";
+>>>>>>> e9cee71 (youtube music + soundcloud)
 import { isSaavnId } from "@/platform/android/saavn/saavnApi";
 import { resolveSaavnStream } from "@/platform/android/saavn/saavnStream";
 import {
@@ -183,7 +188,13 @@ async function resolveStream(
       bitrate: 0,
     };
   if (isOfflineMode()) throw new Error(OFFLINE_UNAVAILABLE_MESSAGE);
+<<<<<<< HEAD
   const resolve = (bounded: AbortSignal | undefined) => {
+=======
+  const resolve = async (bounded: AbortSignal | undefined) =>
+    toAndroidBuffered(await resolveRaw(bounded), bounded);
+  const resolveRaw = (bounded: AbortSignal | undefined) => {
+>>>>>>> e9cee71 (youtube music + soundcloud)
     if (isSaavnId(track.id)) return resolveSaavnStream(track.id, bounded);
     if (toSoundCloudTrackId(track.id))
       return resolveSoundCloud(track, progressive, bounded);
@@ -195,6 +206,36 @@ async function resolveStream(
   return progressive ? withResolveTimeout(signal, resolve) : resolve(signal);
 }
 
+<<<<<<< HEAD
+=======
+// the WebView cannot stream cross-origin audio (no CORS), so on Android remote
+// url streams are downloaded through the native layer into a blob first
+async function toAndroidBuffered(
+  stream: PlaybackStream,
+  signal?: AbortSignal,
+): Promise<PlaybackStream> {
+  if (!isAndroidApp() || stream.blob || !stream.url) return stream;
+  if (!/^https?:/i.test(stream.url) || /mpegurl/i.test(stream.mimeType))
+    return stream;
+  const blob = await downloadAudioBlob(
+    stream.url,
+    stream.mimeType,
+    signal,
+    stream.contentLength,
+  );
+  stream.release?.();
+  return {
+    source: stream.source,
+    mimeType: stream.mimeType,
+    codec: stream.codec,
+    bitrate: stream.bitrate,
+    ...(stream.standIn ? { standIn: true } : {}),
+    blob,
+    expiresAtMs: null,
+  };
+}
+
+>>>>>>> e9cee71 (youtube music + soundcloud)
 export const RESOLVE_TIMEOUT_MS = 25_000;
 export const RESOLVE_TIMEOUT_MESSAGE =
   "Timed out looking for a playable stream";

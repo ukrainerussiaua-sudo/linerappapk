@@ -63,6 +63,10 @@ import {
   handleGuestRequest,
 } from "@/platform/android/guest/guestBackend";
 import { saavnCatalog } from "@/platform/android/saavn/saavnCatalog";
+<<<<<<< HEAD
+=======
+import { isSaavnId } from "@/platform/android/saavn/saavnApi";
+>>>>>>> e9cee71 (youtube music + soundcloud)
 import {
   guestLyricsEvents,
   guestSearchLyrics,
@@ -850,17 +854,33 @@ export const api = {
     return request<LeaderboardResponse>(`/v1/leaderboards/global?${params}`);
   },
   search(q: string, type: SearchType = "all"): Promise<SearchResponse> {
+<<<<<<< HEAD
     if (isAndroidApp()) return saavnCatalog.search(q, type);
     const params = new URLSearchParams({ q, type });
     return clientCatalog.search(q, type, () =>
       request<SearchResponse>(`/v1/catalog/search?${params}`),
+=======
+    const params = new URLSearchParams({ q, type });
+    return clientCatalog.search(q, type, () =>
+      isAndroidApp()
+        ? saavnCatalog.search(q, type)
+        : request<SearchResponse>(`/v1/catalog/search?${params}`),
+>>>>>>> e9cee71 (youtube music + soundcloud)
     );
   },
 
   getTrack(id: string): Promise<ApiTrackDetails> {
+<<<<<<< HEAD
     if (isAndroidApp()) return saavnCatalog.getTrack(id);
     return clientCatalog.getTrack(id, () =>
       request<ApiTrackDetails>(`/v1/catalog/tracks/${encodeURIComponent(id)}`),
+=======
+    if (isAndroidApp() && isSaavnId(id)) return saavnCatalog.getTrack(id);
+    return clientCatalog.getTrack(id, () =>
+      isAndroidApp()
+        ? Promise.reject(new Error("track unavailable"))
+        : request<ApiTrackDetails>(`/v1/catalog/tracks/${encodeURIComponent(id)}`),
+>>>>>>> e9cee71 (youtube music + soundcloud)
     );
   },
 
@@ -875,7 +895,11 @@ export const api = {
     },
   ): Promise<RadioResponse> {
     const history = new Set(options?.history ?? []);
+<<<<<<< HEAD
     const radio = isAndroidApp()
+=======
+    const radio = isAndroidApp() && isSaavnId(id)
+>>>>>>> e9cee71 (youtube music + soundcloud)
       ? saavnCatalog.getRadio(id, options?.k)
       : clientCatalog.getRadio(id, options?.k);
     return radio.then((response) => ({
@@ -884,30 +908,59 @@ export const api = {
   },
 
   getAlbum(id: string): Promise<ApiAlbumDetails> {
+<<<<<<< HEAD
     if (isAndroidApp()) return saavnCatalog.getAlbum(id);
     return clientCatalog.getAlbum(id, () =>
       request<ApiAlbumDetails>(`/v1/catalog/albums/${encodeURIComponent(id)}`),
+=======
+    if (isAndroidApp() && isSaavnId(id)) return saavnCatalog.getAlbum(id);
+    return clientCatalog.getAlbum(id, () =>
+      isAndroidApp()
+        ? Promise.reject(new Error("album unavailable"))
+        : request<ApiAlbumDetails>(`/v1/catalog/albums/${encodeURIComponent(id)}`),
+>>>>>>> e9cee71 (youtube music + soundcloud)
     );
   },
 
   getArtistImage(id: string): Promise<string | undefined> {
+<<<<<<< HEAD
     if (isAndroidApp()) return saavnCatalog.getArtistImage(id);
+=======
+    if (isAndroidApp() && isSaavnId(id))
+      return saavnCatalog.getArtistImage(id);
+>>>>>>> e9cee71 (youtube music + soundcloud)
     return clientCatalog.getArtistImage(id);
   },
 
   getArtist(id: string): Promise<ApiArtistDetails> {
+<<<<<<< HEAD
     if (isAndroidApp()) return saavnCatalog.getArtist(id);
     return clientCatalog.getArtist(id, () =>
       request<ApiArtistDetails>(
+=======
+    if (isAndroidApp() && isSaavnId(id)) return saavnCatalog.getArtist(id);
+    return clientCatalog.getArtist(id, () =>
+      isAndroidApp()
+        ? Promise.reject(new Error("artist unavailable"))
+        : request<ApiArtistDetails>(
+>>>>>>> e9cee71 (youtube music + soundcloud)
         `/v1/catalog/artists/${encodeURIComponent(id)}`,
       ),
     );
   },
 
   getPlaylist(id: string): Promise<ApiCatalogPlaylistDetails> {
+<<<<<<< HEAD
     if (isAndroidApp()) return saavnCatalog.getPlaylist(id);
     return clientCatalog.getPlaylist(id, () =>
       request<ApiCatalogPlaylistDetails>(
+=======
+    if (isAndroidApp() && isSaavnId(id)) return saavnCatalog.getPlaylist(id);
+    return clientCatalog.getPlaylist(id, () =>
+      isAndroidApp()
+        ? Promise.reject(new Error("playlist unavailable"))
+        : request<ApiCatalogPlaylistDetails>(
+>>>>>>> e9cee71 (youtube music + soundcloud)
         `/v1/catalog/playlists/${encodeURIComponent(id)}`,
       ),
     );
