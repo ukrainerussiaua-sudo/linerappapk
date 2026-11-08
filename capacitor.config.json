@@ -1,0 +1,17 @@
+{
+  "appId": "com.liner.android.personal",
+  "appName": "Liner",
+  "webDir": "dist",
+  "backgroundColor": "#000000",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": false
+    }
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
